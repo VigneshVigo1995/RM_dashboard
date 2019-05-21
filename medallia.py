@@ -11,6 +11,10 @@ from datetime import date, timedelta
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from dateutil.relativedelta import *
+import os
+from openpyxl import Workbook
+from openpyxl import load_workbook
+import win32com.client as win32
 
 def download():
 	driver.find_element_by_xpath("(//i[@class='icon icon-export icon-size-18'])[position()=1]").click()
@@ -151,3 +155,23 @@ for file in os.listdir():
 ######################################################################################################################################################################################################
 ######################################################################################################################################################################################################
 ######################################################################################################################################################################################################
+
+for i in names:
+	fname = 'C:\\Users\\purushv\\Downloads\\Medallia\\'+i+'.xls'
+	excel = win32.gencache.EnsureDispatch('Excel.Application')
+	wb = excel.Workbooks.Open(fname)
+
+	wb.SaveAs(fname+"x", FileFormat = 51)    #FileFormat = 51 is for .xlsx extension
+	wb.Close()                               #FileFormat = 56 is for .xls extension
+	excel.Application.Quit()
+	
+	os.remove(fname)
+
+
+	# Instantiating a Workbook object by excel file path
+	wb = load_workbook('C://Users//purushv//Downloads//Medallia//'+i+'.xlsx')
+	ws = wb.active
+	ws.delete_rows(1,7)
+
+	# Saving the modified Excel file in default (that is Excel 2003) format
+	wb.save('C://Users//purushv//Downloads//Medallia//'+i+'.xlsx')
